@@ -1,13 +1,13 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
 import { servicesList } from "@/lib/services-data";
 
 const iconClass = "h-9 w-9 shrink-0 stroke-[1.5] stroke-current";
 
-const serviceIcons: Record<string, () => JSX.Element> = {
+const serviceIcons: Record<string, () => React.ReactElement> = {
   "product-design": () => (
     <svg className={iconClass} fill="none" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" aria-hidden>
       <path d="M12 19l7-7 3 3-7 7-3-3z" />
@@ -61,10 +61,34 @@ const serviceIcons: Record<string, () => JSX.Element> = {
   ),
 };
 
-const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.06 } } };
+/* Scroll-in: cards rise from below with stagger + subtle scale */
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.08,
+    },
+  },
+};
 const item = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0 },
+  hidden: {
+    opacity: 0,
+    y: 48,
+    scale: 0.92,
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "spring" as const,
+      stiffness: 100,
+      damping: 18,
+      mass: 0.9,
+    },
+  },
 };
 
 export function Services() {
@@ -99,11 +123,7 @@ export function Services() {
               <motion.div key={service.slug} variants={item}>
                 <Link href={`/services/${service.slug}`} className="block group">
                   <motion.div
-                    className="group/card relative flex items-center justify-between rounded-xl border border-border/50 px-6 py-5 overflow-hidden bg-[var(--services-card)] services-card-shadow"
-                    whileHover={{
-                      backgroundColor: "var(--axion)",
-                      transition: { duration: 0.2 },
-                    }}
+                    className="group/card services-card-bg relative flex items-center justify-between rounded-xl border border-border/50 px-6 py-5 overflow-hidden services-card-shadow"
                     transition={{ duration: 0.2 }}
                   >
                     {/* Title: left side */}

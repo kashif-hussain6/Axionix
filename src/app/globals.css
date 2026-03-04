@@ -31,8 +31,9 @@
   --wave-fill: var(--background);
   --services-card: #1e293b;
   --services-card-foreground: #e5e7eb;
-  --services-card-shadow: 0 8px 36px -4px rgba(88, 201, 255, 0.4);
-  --services-card-hover-shadow: 0 20px 56px -4px rgba(37, 120, 164, 0.7);
+  /* Softer dark shadow: subtle glow + depth, no harsh blue */
+  --services-card-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --services-card-hover-shadow: 0 12px 40px -4px rgba(0, 0, 0, 0.5), 0 0 32px -8px rgba(88, 201, 255, 0.25);
 }
 
 @theme inline {
@@ -79,13 +80,33 @@ body {
   outline-offset: 2px;
 }
 
-/* Services section cards – default shadow, hover shadow #2578a4 */
+/* Services section cards – theme-aware background (no inline styles so theme toggles apply) */
+.services-card-bg {
+  background-color: var(--services-card);
+  transition: background-color 0.2s ease, box-shadow 0.25s ease;
+}
+.services-card-bg:hover {
+  background-color: var(--axion);
+}
+
+/* Services section cards – default shadow, hover shadow */
 .services-card-shadow {
   box-shadow: var(--services-card-shadow);
   transition: box-shadow 0.25s ease;
 }
 .services-card-shadow:hover {
   box-shadow: var(--services-card-hover-shadow);
+}
+
+/* Leadership section cards – strong shadow on hover when scrolling */
+.leadership-card {
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+.leadership-card:hover {
+  box-shadow: 0 28px 60px -12px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(88, 201, 255, 0.2);
+}
+.dark .leadership-card:hover {
+  box-shadow: 0 28px 60px -12px rgba(0, 0, 0, 0.6), 0 0 40px -8px rgba(88, 201, 255, 0.2), 0 0 0 1px rgba(88, 201, 255, 0.15);
 }
 
 /* 3D perspective for motion elements */

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 
 const team = [
@@ -20,6 +20,21 @@ type CardProps = {
   name: string;
   role: string;
   image: string;
+};
+
+const cardEnter = {
+  hidden: { opacity: 0, y: 32, scale: 0.94 },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "spring" as const,
+      stiffness: 120,
+      damping: 22,
+      delay: 0.12 + i * 0.08,
+    },
+  }),
 };
 
 function Card({ name, role, image }: CardProps) {
@@ -55,11 +70,17 @@ function Card({ name, role, image }: CardProps) {
   );
 }
 
+// Duplicate so we can scroll left forever, then instantly reset to start (no reverse)
+const duplicatedTeam = [...team, ...team];
+
 export function LeadershipSlider() {
   const [index, setIndex] = useState(0);
+  const [instant, setInstant] = useState(false);
   const [cardWidth, setCardWidth] = useState(320);
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(sectionRef, { once: true, margin: "-60px" });
 
   useEffect(() => {
     const updateSize = () => {
@@ -70,22 +91,42 @@ export function LeadershipSlider() {
     return () => window.removeEventListener("resize", updateSize);
   }, []);
 
-  // Auto-scroll carousel
+  // When we reach the duplicate of the first card, reset to 0 without animating (seamless loop)
+  useEffect(() => {
+    if (index === team.length) {
+      setIndex(0);
+      setInstant(true);
+    }
+  }, [index]);
+
+  useEffect(() => {
+    if (!instant) return;
+    const id = requestAnimationFrame(() => setInstant(false));
+    return () => cancelAnimationFrame(id);
+  }, [instant]);
+
+  // Auto-scroll: advance one card; when index hits team.length, effect above resets to 0 (instant, no reverse)
   useEffect(() => {
     const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % team.length);
+      setIndex((prev) => Math.min(prev + 1, team.length));
     }, AUTO_SLIDE_MS);
     return () => clearInterval(timer);
   }, []);
 
   const goTo = (i: number) => setIndex(Math.max(0, Math.min(i, team.length - 1)));
   const offset = index * (cardWidth + CARD_GAP);
+  const logicalIndex = index % team.length; // for dots and "active" card highlight
 
   return (
-    <section id="leadership" className="relative py-24 bg-background">
+    <section ref={sectionRef} id="leadership" className="relative py-24 bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header like reference: small accent + title */}
-        <div className="flex items-center gap-3 mb-12">
+        {/* Header – scroll-in animation */}
+        <motion.div
+          className="flex items-center gap-3 mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        >
           <div
             className="flex-shrink-0 w-7 h-7 rounded-sm bg-axion rotate-accent"
             aria-hidden
@@ -93,26 +134,34 @@ export function LeadershipSlider() {
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             Meet Axionix X Leadership
           </h2>
-        </div>
+        </motion.div>
 
-        {/* Cards row – auto-scrolling slider, clean white section */}
+        {/* Cards row – infinite scroll left; when end reached, reset to start (no reverse) */}
         <div className="relative">
           <div ref={containerRef} className="overflow-hidden px-2 sm:px-4">
             <motion.div
               className="flex gap-6"
               animate={{ x: -offset }}
-              transition={{ type: "spring", stiffness: 260, damping: 35 }}
+              transition={
+                instant
+                  ? { duration: 0 }
+                  : { type: "spring", stiffness: 260, damping: 35 }
+              }
             >
-              {team.map((person, i) => {
+              {duplicatedTeam.map((person, i) => {
                 const isActive = i === index;
                 return (
-                  <div
-                    key={person.name}
+                  <motion.div
+                    key={`${person.name}-${i}`}
                     ref={i === 0 ? cardRef : null}
                     className="flex-shrink-0 w-[80vw] sm:w-[320px] md:w-[360px] lg:w-[380px]"
+                    initial="hidden"
+                    animate={inView ? "show" : "hidden"}
+                    variants={cardEnter}
+                    custom={i % team.length}
                   >
                     <motion.div
-                      className={`h-[360px] sm:h-[420px] rounded-[36px] border transition-all duration-500 bg-white ${
+                      className={`leadership-card h-[360px] sm:h-[420px] rounded-[36px] border transition-all duration-300 bg-white ${
                         isActive
                           ? "border-axion/40 shadow-[0_20px_50px_-12px_rgba(15,23,42,0.18),0_0_0_1px_rgba(88,201,255,0.15)]"
                           : "border-slate-200/80 shadow-[0_12px_40px_-12px_rgba(15,23,42,0.12)]"
@@ -130,14 +179,14 @@ export function LeadershipSlider() {
                     >
                       <Card {...person} />
                     </motion.div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </motion.div>
           </div>
         </div>
 
-        {/* Pagination dots – active = Axionix colour */}
+        {/* Pagination dots – active = Axionix colour (by logical index) */}
         <div className="flex justify-center gap-2 mt-10">
           {team.map((_, i) => (
             <button
@@ -146,7 +195,7 @@ export function LeadershipSlider() {
               aria-label={`Go to slide ${i + 1}`}
               onClick={() => goTo(i)}
               className={`h-2 rounded-full transition-all duration-300 ${
-                i === index ? "w-8 bg-axion" : "w-2 bg-slate-300 hover:bg-slate-400"
+                i === logicalIndex ? "w-8 bg-axion" : "w-2 bg-slate-300 hover:bg-slate-400"
               }`}
             />
           ))}

@@ -8,7 +8,7 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative mt-24 min-h-[calc(100vh-96px)] flex items-center justify-center overflow-hidden bg-background text-foreground perspective-3d"
+      className="relative min-h-[calc(100vh-96px)] flex items-center justify-center overflow-hidden bg-background text-foreground perspective-3d"
     >
       {/* Content – logo and copy, shadow only (no coloured orbs in light/dark) */}
       <div className="relative z-10 mx-auto w-full max-w-6xl text-center">

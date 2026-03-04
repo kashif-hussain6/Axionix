@@ -132,14 +132,14 @@ export function Navbar() {
             </div>
           </nav>
 
-          {/* Right: Link + CTA button */}
+          {/* Right: Link + CTA button (Get Started hidden on small screens – shown inside mobile menu) */}
           <div className="flex shrink-0 items-center gap-5">
             <Link href="#contact" className="hidden text-sm text-muted hover:text-foreground sm:block">
               Contact
             </Link>
             <Link
               href="#cta"
-              className="rounded-lg bg-axion px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-axion-dark transition-colors"
+              className="hidden rounded-lg bg-axion px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-axion-dark transition-colors md:inline-block"
             >
               Get Started
             </Link>
@@ -231,13 +231,18 @@ export function Navbar() {
                     {label}
                   </Link>
                 ))}
-                <Link href="#cta" className="rounded-lg px-4 py-3 text-foreground/80 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-axion" onClick={() => setMobileOpen(false)}>
-                  Get Started
-                </Link>
                 <Link href="#contact" className="rounded-lg px-4 py-3 text-foreground/80 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-axion" onClick={() => setMobileOpen(false)}>
                   Contact
                 </Link>
               </div>
+              {/* Get Started CTA inside mobile menu */}
+              <Link
+                href="#cta"
+                className="mt-4 block w-full rounded-lg bg-axion px-4 py-3 text-center text-sm font-medium text-white shadow-sm hover:bg-axion-dark transition-colors"
+                onClick={() => setMobileOpen(false)}
+              >
+                Get Started
+              </Link>
             </motion.nav>
           </motion.div>
         )}

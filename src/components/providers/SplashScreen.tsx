@@ -7,9 +7,9 @@ import Image from "next/image";
 
 const DOT_COUNT = 52;
 
-/** Longer hold so slow zoom + dots are visible before fade */
-const SPLASH_VISIBLE_MS = 4200;
-const EXIT_DURATION = 0.45;
+/** Short hold: logo shows quickly, then splash + logo fade out together */
+const SPLASH_VISIBLE_MS = 2000;
+const EXIT_DURATION = 0.1;
 
 type DotConfig = {
   left: string;
@@ -124,9 +124,11 @@ export function SplashScreen({ children }: { children: React.ReactNode }) {
             role="presentation"
             aria-hidden
             className="fixed inset-0 z-[10050] flex min-h-dvh w-full flex-col items-center justify-center overflow-hidden"
-            initial={{ opacity: 1 }}
+            style={{ transformOrigin: "50% 50%" }}
+            initial={{ opacity: 1, scale: 1 }}
             exit={{
               opacity: 0,
+              scale: 0.96,
               transition: { duration: EXIT_DURATION, ease: [0.65, 0, 0.35, 1] },
             }}
           >
@@ -167,22 +169,9 @@ export function SplashScreen({ children }: { children: React.ReactNode }) {
 
             <SplashFloatingDots />
 
-            {/* Logo above dots */}
+            {/* Logo above dots — no entrance delay; exits with overlay */}
             <div className="relative z-[2] flex w-full justify-center px-4 sm:px-6">
-              <motion.div
-                className="flex justify-center"
-                style={{ transformOrigin: "50% 50%" }}
-                initial={{ scale: 0.82 }}
-                animate={{ scale: [0.82, 1.06, 1] }}
-                transition={{
-                  duration: 2.45,
-                  times: [0, 0.52, 1],
-                  ease: [
-                    [0.25, 0.1, 0.25, 1],
-                    [0.33, 1, 0.68, 1],
-                  ],
-                }}
-              >
+              <div className="flex justify-center">
                 <Image
                   src="/axionix-logo.svg"
                   alt="Axionix X"
@@ -190,8 +179,9 @@ export function SplashScreen({ children }: { children: React.ReactNode }) {
                   height={160}
                   className="block h-32 w-auto max-w-[min(94vw,420px)] object-contain object-center drop-shadow-[0_12px_48px_rgba(88,201,255,0.35)] sm:h-36 sm:max-w-[min(92vw,500px)] md:h-44 md:max-w-[min(90vw,580px)] lg:h-48 lg:max-w-[min(88vw,660px)]"
                   priority
+                  fetchPriority="high"
                 />
-              </motion.div>
+              </div>
             </div>
           </motion.div>
         )}

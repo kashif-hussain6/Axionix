@@ -9,10 +9,10 @@ import { useTheme } from "next-themes";
 const navLinks = [
   { href: "#hero", label: "Home" },
   { href: "#services", label: "Services" },
+  { href: "#showcase", label: "Projects" },
   { href: "#programs", label: "Programs" },
-  { href: "#why", label: "Why Us" },
   { href: "#leadership", label: "Leadership" },
-  { href: "#news", label: "News" },
+  { href: "#faq", label: "FAQ" },
 ];
 
 export function Navbar() {
@@ -30,7 +30,7 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    const sections = ["hero", "services", "programs", "why", "leadership", "news", "cta", "contact"];
+    const sections = ["hero", "services", "showcase", "programs", "leadership", "faq", "cta", "contact"];
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {

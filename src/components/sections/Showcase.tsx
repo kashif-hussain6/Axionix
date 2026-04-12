@@ -4,7 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { showcaseProjects } from "@/lib/projects-data";
+import { showcaseProjects } from "@/lib/data";
 
 const cardSpring = {
   type: "spring" as const,

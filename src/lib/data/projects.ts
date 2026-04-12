@@ -5,13 +5,11 @@ export type ShowcaseProject = {
   imageAlt: string;
 };
 
-/** Basename without extension, e.g. `/foo/bar/sunrise-resort.png` → `sunrise-resort` */
 function imageBasename(imageSrc: string): string {
   const segment = imageSrc.split("/").pop() ?? "";
   return segment.replace(/\.[^.]+$/, "") || "project";
 }
 
-/** URL-safe id for React keys, from filename */
 function slugFromImagePath(imageSrc: string): string {
   const name = imageBasename(imageSrc);
   return (
@@ -22,12 +20,6 @@ function slugFromImagePath(imageSrc: string): string {
   );
 }
 
-/**
- * Human-readable title from the image filename.
- * - `project1.jpg` → "Project 1"
- * - `sunrise-resort.png` → "Sunrise Resort"
- * - `Johnson_Partners.jpg` → "Johnson Partners"
- */
 function titleFromImagePath(imageSrc: string): string {
   const name = imageBasename(imageSrc);
   if (!name || name === "project") return "Project";
@@ -43,9 +35,7 @@ function titleFromImagePath(imageSrc: string): string {
 }
 
 type ShowcaseProjectInput = {
-  /** Path under `public/` — name (without extension) drives the card title */
   imageSrc: string;
-  /** Optional; defaults to "{title} project preview" */
   imageAlt?: string;
 };
 
@@ -59,10 +49,6 @@ function toProject(input: ShowcaseProjectInput): ShowcaseProject {
   };
 }
 
-/**
- * Only list `imageSrc` here. The visible name is always derived from the file name
- * (e.g. `/green-leaf.jpg` → "Green Leaf", `/project2.png` → "Project 2").
- */
 const showcaseProjectInputs: ShowcaseProjectInput[] = [
   { imageSrc: "/project1.jpg" },
   { imageSrc: "/project2.png" },

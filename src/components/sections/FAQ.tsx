@@ -2,7 +2,7 @@
 
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useId, useState } from "react";
-import { faqItems } from "@/lib/faq-data";
+import { faqItems } from "@/lib/data";
 
 function EyeOffIcon({ className }: { className?: string }) {
   return (

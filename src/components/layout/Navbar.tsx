@@ -5,15 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-
-const navLinks = [
-  { href: "#hero", label: "Home" },
-  { href: "#services", label: "Services" },
-  { href: "#showcase", label: "Projects" },
-  { href: "#programs", label: "Programs" },
-  { href: "#leadership", label: "Leadership" },
-  { href: "#faq", label: "FAQ" },
-];
+import { mainNavLinks, homeScrollSectionIds } from "@/config/navigation";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -30,7 +22,7 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    const sections = ["hero", "services", "showcase", "programs", "leadership", "faq", "cta", "contact"];
+    const sections = [...homeScrollSectionIds];
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -79,7 +71,7 @@ export function Navbar() {
 
           {/* Center: Nav links */}
           <nav className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 md:flex md:items-center md:gap-9">
-            {navLinks.map(({ href, label }) => {
+            {mainNavLinks.map(({ href, label }) => {
               const id = href.slice(1);
               const isActive = activeId === id;
               return (
@@ -221,7 +213,7 @@ export function Navbar() {
                 </svg>
               </button>
               <div className="flex flex-col gap-1">
-                {navLinks.map(({ href, label }) => (
+                {mainNavLinks.map(({ href, label }) => (
                   <Link
                     key={href}
                     href={href}

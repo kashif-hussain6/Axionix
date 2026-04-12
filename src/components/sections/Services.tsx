@@ -3,7 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import React, { useRef } from "react";
 import Link from "next/link";
-import { servicesList } from "@/lib/services-data";
+import { servicesList } from "@/lib/data";
 
 const iconClass = "h-9 w-9 shrink-0 stroke-[1.5] stroke-current";
 

@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { SiteContainer } from "@/components/layout/SiteContainer";
 
 export function Footer() {
   return (
     <footer className="border-t border-border bg-card py-14">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <SiteContainer>
         <div className="flex flex-col gap-10 md:flex-row md:items-center md:justify-between">
           <Link href="#hero" className="flex items-center">
             <Image src="/axionix-logo.svg" alt="Axionix X" width={100} height={36} className="h-8 w-auto object-contain" />
@@ -30,7 +31,7 @@ export function Footer() {
           </div>
         </div>
         <p className="mt-8 text-sm text-muted">© {new Date().getFullYear()} Axionix X. All rights reserved.</p>
-      </div>
+      </SiteContainer>
     </footer>
   );
 }

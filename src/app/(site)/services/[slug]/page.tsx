@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getServiceBySlug, servicesList } from "@/lib/data";
+import { SiteContainer } from "@/components/layout/SiteContainer";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -27,14 +28,14 @@ export default async function ServicePage({ params }: Props) {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <section className="relative bg-card py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <SiteContainer>
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">{service.title}</h1>
           <p className="mt-3 text-muted">Professional {service.title} to help you build the future.</p>
-        </div>
+        </SiteContainer>
       </section>
 
       <section className="py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <SiteContainer>
           <div className="grid gap-12 lg:grid-cols-[1fr_280px]">
             <div className="prose prose-slate dark:prose-invert max-w-none">
               <p className="text-lg leading-relaxed text-foreground">
@@ -76,7 +77,7 @@ export default async function ServicePage({ params }: Props) {
               </Link>
             </aside>
           </div>
-        </div>
+        </SiteContainer>
       </section>
     </main>
   );

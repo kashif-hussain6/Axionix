@@ -1,22 +1,32 @@
 @import "tailwindcss";
 
+/* Match next-themes (`attribute="class"`): default `dark:` uses prefers-color-scheme and can
+   fight the toggle — e.g. white `dark:!text-*` on a light `bg-white` when OS is in dark mode. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  /* Light theme */
-  --background: #ffffff;
-  --foreground: #0f172a;
-  --axion: #58c9ff;
-  --axion-light: #8dd9ff;
-  --axion-dark: #3ab0e8;
-  --muted: #64748b;
+  /* Light theme — cool tinted canvas, crisp cards, axion-forward accents */
+  --background: #eef4fa;
+  --foreground: #0c1222;
+  --axion: #1ea4e8;
+  --axion-light: #5ec8ff;
+  --axion-dark: #0d8ecf;
+  --muted: #5c6b7d;
   --card: #ffffff;
-  --card-foreground: #0f172a;
-  --border: #e2e8f0;
-  --ring: #58c9ff;
+  --card-foreground: #0c1222;
+  --border: #d4e2ef;
+  --ring: #1ea4e8;
   --wave-fill: var(--background);
-  --services-card: #f5f5f5;
-  --services-card-foreground: #0f172a;
-  --services-card-shadow: 0 8px 32px -4px rgba(88, 201, 255, 0.35);
-  --services-card-hover-shadow: 0 16px 48px -4px rgba(37, 120, 164, 0.65);
+  --services-card: #ffffff;
+  --services-card-foreground: #0c1222;
+  --services-card-shadow:
+    0 1px 3px rgb(12 18 34 / 0.05),
+    0 10px 28px -8px rgb(30 164 232 / 0.1),
+    0 0 0 1px rgb(12 18 34 / 0.04);
+  --services-card-hover-shadow:
+    0 6px 16px -4px rgb(12 18 34 / 0.08),
+    0 22px 44px -12px rgb(30 164 232 / 0.22),
+    0 0 0 1px rgb(30 164 232 / 0.28);
 }
 
 .dark {
@@ -27,13 +37,22 @@
   --card: #020617;
   --card-foreground: #e5e7eb;
   --border: #1f2933;
-  --ring: #58c9ff;
+  --axion: #5ec8ff;
+  --axion-light: #93d9ff;
+  --axion-dark: #2eb5ea;
+  --ring: #5ec8ff;
   --wave-fill: var(--background);
-  --services-card: #1e293b;
+  --services-card: #0f172a;
   --services-card-foreground: #e5e7eb;
-  /* Softer dark shadow: subtle glow + depth, no harsh blue */
-  --services-card-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.04);
-  --services-card-hover-shadow: 0 12px 40px -4px rgba(0, 0, 0, 0.5), 0 0 32px -8px rgba(88, 201, 255, 0.25);
+  --services-card-shadow:
+    0 1px 2px rgb(0 0 0 / 0.35),
+    0 8px 28px -6px rgb(0 0 0 / 0.55),
+    0 0 0 1px rgb(255 255 255 / 0.06);
+  --services-card-hover-shadow:
+    0 6px 12px -4px rgb(0 0 0 / 0.45),
+    0 24px 48px -12px rgb(0 0 0 / 0.5),
+    0 0 0 1px rgb(88 201 255 / 0.28),
+    0 0 40px -12px rgb(88 201 255 / 0.2);
 }
 
 @theme inline {
@@ -47,10 +66,10 @@
   --color-card-foreground: var(--card-foreground);
   --color-border: var(--border);
   --color-ring: var(--ring);
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-outfit);
   --font-mono: var(--font-geist-mono);
   --radius-2xl: 1rem;
-  --shadow-glow: 0 0 40px -10px rgba(88, 201, 255, 0.4);
+  --shadow-glow: 0 0 40px -10px rgba(30, 164, 232, 0.38);
   --shadow-soft: 0 4px 24px -4px rgba(0, 0, 0, 0.08);
 }
 
@@ -58,10 +77,27 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Light: soft radial wash so pages feel less flat than pure white */
+html:not(.dark) body {
+  background:
+    radial-gradient(ellipse 130% 70% at 50% -25%, rgb(30 164 232 / 0.16), transparent 52%),
+    radial-gradient(ellipse 70% 45% at 100% 0%, rgb(94 200 255 / 0.12), transparent 48%),
+    radial-gradient(ellipse 55% 40% at 0% 15%, rgb(30 164 232 / 0.06), transparent 50%),
+    var(--background);
+  color: var(--foreground);
+  font-family: var(--font-outfit), system-ui, sans-serif;
+}
+
+html.dark body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-outfit), system-ui, sans-serif;
 }
 
 /* Subtle noise texture overlay */
@@ -80,22 +116,172 @@ body {
   outline-offset: 2px;
 }
 
-/* Services section cards – theme-aware background (no inline styles so theme toggles apply) */
-.services-card-bg {
+/* Services cards – surface + shadow (accent via --svc-accent on wrapper) */
+.services-card-surface {
   background-color: var(--services-card);
-  transition: background-color 0.2s ease, box-shadow 0.25s ease;
+  box-shadow: var(--services-card-shadow);
+  transition:
+    background-color 0.28s ease,
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.services-card-bg:hover {
+.services-card-surface:hover {
   background-color: var(--axion);
+  box-shadow: var(--services-card-hover-shadow);
 }
 
-/* Services section cards – default shadow, hover shadow */
-.services-card-shadow {
-  box-shadow: var(--services-card-shadow);
-  transition: box-shadow 0.25s ease;
+/* Stack list cards: override full axion fill — lift + soft tint + refined shadow */
+.services-stack-card.services-card-surface {
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    background-color 0.35s ease;
 }
-.services-card-shadow:hover {
-  box-shadow: var(--services-card-hover-shadow);
+@media (hover: hover) and (pointer: fine) {
+  .services-stack-card.services-card-surface:hover {
+    transform: translateY(-5px);
+  }
+}
+.services-stack-card.services-card-surface:hover {
+  background-color: color-mix(in srgb, var(--services-card) 94%, var(--axion) 6%);
+  border-color: rgb(30 164 232 / 0.32);
+  box-shadow:
+    0 3px 10px -2px rgb(12 18 34 / 0.08),
+    0 12px 28px -10px rgb(30 164 232 / 0.14),
+    0 0 0 1px rgb(30 164 232 / 0.22),
+    0 0 28px -8px rgb(30 164 232 / 0.1);
+}
+.dark .services-stack-card.services-card-surface:hover {
+  background-color: color-mix(in srgb, var(--services-card) 90%, var(--axion) 10%);
+  border-color: rgb(30 164 232 / 0.3);
+  box-shadow:
+    0 6px 16px -4px rgb(0 0 0 / 0.45),
+    0 16px 36px -12px rgb(30 164 232 / 0.12),
+    0 0 0 1px rgb(30 164 232 / 0.26),
+    0 0 32px -8px rgb(30 164 232 / 0.14);
+}
+
+.group\/card:hover .services-stack-card .services-card-glow {
+  opacity: 0.4;
+}
+
+/* Left accent rail — unique per card via --svc-accent (space-separated R G B) */
+.services-card-accent {
+  background: linear-gradient(
+    180deg,
+    rgb(var(--svc-accent) / 0.85) 0%,
+    rgb(var(--svc-accent) / 0.25) 100%
+  );
+  box-shadow: 0 0 20px -4px rgb(var(--svc-accent) / 0.45);
+}
+
+/* Hover glow blob (fades in with card hover) */
+.services-card-glow {
+  background: radial-gradient(
+    circle at 85% 15%,
+    rgb(var(--svc-accent) / 0.22) 0%,
+    transparent 55%
+  );
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.group\/card:hover .services-card-glow {
+  opacity: 1;
+}
+
+/* Sheen sweep on hover */
+.services-card-sheen {
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgb(255 255 255 / 0.12) 45%,
+    transparent 70%
+  );
+  transform: translateX(-120%) skewX(-12deg);
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.group\/card:hover .services-card-sheen {
+  transform: translateX(120%) skewX(-12deg);
+}
+.dark .services-card-sheen {
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgb(255 255 255 / 0.06) 45%,
+    transparent 70%
+  );
+}
+
+/*
+ * Services scroll-stack: long per-slot scroll + tight overlap = slow, even “lift over” motion.
+ * GPU hint on sticky reduces jank while scrolling.
+ */
+.services-stack-slot {
+  scroll-margin-top: 5.5rem;
+}
+@media (min-width: 1024px) {
+  .services-stack-sticky {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+  }
+
+  .services-stack-slot {
+    --services-stack-card-stack-pull: calc(-1 * (17.25rem - 1.35rem));
+    min-height: min(122svh, 58rem);
+  }
+  .services-stack-slot + .services-stack-slot {
+    margin-top: var(--services-stack-card-stack-pull);
+  }
+  .services-stack-slot:last-child {
+    min-height: min(92svh, 46rem);
+  }
+
+  #services.services-stack-section {
+    overscroll-behavior: contain;
+  }
+}
+
+/* Stack cards on lg: deeper resting shadow + stronger lift shadow (hover tint from rules above) */
+@media (min-width: 1024px) {
+  .services-stack-card.services-card-surface {
+    box-shadow:
+      0 1px 2px rgb(15 23 42 / 0.05),
+      0 8px 24px -6px rgb(15 23 42 / 0.1),
+      0 0 0 1px rgb(15 23 42 / 0.06);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .services-stack-card.services-card-surface:hover {
+      transform: translateY(-6px);
+    }
+  }
+  .services-stack-card.services-card-surface:hover {
+    box-shadow:
+      0 4px 12px -2px rgb(12 18 34 / 0.08),
+      0 20px 44px -12px rgb(30 164 232 / 0.2),
+      0 32px 64px -20px rgb(12 18 34 / 0.12),
+      0 0 0 1px rgb(30 164 232 / 0.28),
+      0 0 36px -8px rgb(30 164 232 / 0.15);
+  }
+  .dark .services-stack-card.services-card-surface {
+    box-shadow:
+      0 2px 8px rgb(0 0 0 / 0.35),
+      0 12px 32px -8px rgb(0 0 0 / 0.5),
+      0 0 0 1px rgb(255 255 255 / 0.07);
+  }
+  .dark .services-stack-card.services-card-surface:hover {
+    box-shadow:
+      0 8px 20px -6px rgb(0 0 0 / 0.45),
+      0 24px 48px -14px rgb(0 0 0 / 0.55),
+      0 0 0 1px rgb(30 164 232 / 0.32),
+      0 0 40px -10px rgb(30 164 232 / 0.22);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .services-stack-card.services-card-surface:hover {
+    transform: none !important;
+  }
 }
 
 /* Leadership section cards – strong shadow on hover when scrolling */
@@ -103,10 +289,10 @@ body {
   transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 .leadership-card:hover {
-  box-shadow: 0 28px 60px -12px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(88, 201, 255, 0.2);
+  box-shadow: 0 28px 60px -12px rgba(12, 18, 34, 0.28), 0 0 0 1px rgba(30, 164, 232, 0.22);
 }
 .dark .leadership-card:hover {
-  box-shadow: 0 28px 60px -12px rgba(0, 0, 0, 0.6), 0 0 40px -8px rgba(88, 201, 255, 0.2), 0 0 0 1px rgba(88, 201, 255, 0.15);
+  box-shadow: 0 28px 60px -12px rgba(0, 0, 0, 0.6), 0 0 40px -8px rgba(30, 164, 232, 0.2), 0 0 0 1px rgba(30, 164, 232, 0.18);
 }
 
 /* 3D perspective for motion elements */
@@ -145,13 +331,13 @@ body {
 }
 
 .hero-logo-glow {
-  background: radial-gradient(ellipse 80% 70%, rgba(88, 201, 255, 0.25) 0%, transparent 70%);
+  background: radial-gradient(ellipse 80% 70%, rgba(30, 164, 232, 0.22) 0%, transparent 70%);
   filter: blur(20px);
 }
 
 /* Programs section gradient */
 .programs-bg-gradient {
-  background: radial-gradient(ellipse 60% 60% at 80% 50%, rgba(88, 201, 255, 0.12), transparent);
+  background: radial-gradient(ellipse 60% 60% at 80% 50%, rgba(30, 164, 232, 0.12), transparent);
 }
 
 /* Small accent rotation */

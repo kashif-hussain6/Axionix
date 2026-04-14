@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
+import { SiteContainer } from "@/components/layout/SiteContainer";
 
 const socials = [
   { name: "LinkedIn", href: "#", icon: "in" },
@@ -16,7 +17,7 @@ export function Contact() {
 
   return (
     <section id="contact" className="relative py-24 bg-background">
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <SiteContainer className="relative">
         <motion.div ref={ref} initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6 }} className="mb-14 text-left">
           <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Contact Us.</h2>
           <p className="mt-3 max-w-xl text-slate-500">Get in touch for services or program inquiries.</p>
@@ -57,28 +58,33 @@ export function Contact() {
                 placeholder="Your message"
               />
             </div>
-            <button type="submit" className="w-full rounded-2xl bg-[#58c9ff] py-3.5 font-semibold text-white hover:bg-[#3ab0e8] transition-colors">
+            <button type="submit" className="w-full rounded-2xl bg-axion py-3.5 font-semibold text-white transition-colors hover:bg-axion-dark">
               Send Message
             </button>
           </motion.form>
 
           <motion.div initial={{ opacity: 0, x: 20 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.5 }} className="flex flex-col gap-6">
-            <div className="rounded-2xl border border-slate-200 bg-slate-50/50 p-6">
-              <h3 className="font-semibold text-slate-900 mb-4">Connect</h3>
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+              <h3 className="mb-4 font-semibold text-foreground">Connect</h3>
               <div className="flex gap-4">
                 {socials.map((s) => (
-                  <a key={s.name} href={s.href} className="flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-[#58c9ff]/50 bg-white text-slate-700 hover:border-[#58c9ff] hover:text-[#58c9ff] transition-colors" aria-label={s.name}>
+                  <a
+                    key={s.name}
+                    href={s.href}
+                    className="flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-axion/45 bg-card text-muted transition-colors hover:border-axion hover:text-axion"
+                    aria-label={s.name}
+                  >
                     {s.icon}
                   </a>
                 ))}
               </div>
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50/50 h-64 flex items-center justify-center text-slate-400">
+            <div className="flex h-64 items-center justify-center rounded-2xl border border-border bg-muted/20 text-muted">
               Map placeholder
             </div>
           </motion.div>
         </div>
-      </div>
+      </SiteContainer>
     </section>
   );
 }

@@ -3,6 +3,7 @@
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
+import { SiteContainer } from "@/components/layout/SiteContainer";
 
 const programs = [
   { title: "UI/UX Design", description: "Master user research, wireframing, and high-fidelity design with industry tools." },
@@ -38,7 +39,7 @@ export function Programs() {
   return (
     <section id="programs" ref={ref} className="relative py-24 bg-background overflow-hidden perspective-3d">
       <motion.div style={{ y }} className="programs-bg-gradient absolute inset-0" />
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <SiteContainer className="relative">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 24, rotateX: 8 }}
@@ -79,7 +80,7 @@ export function Programs() {
             </motion.div>
           ))}
         </div>
-      </div>
+      </SiteContainer>
     </section>
   );
 }

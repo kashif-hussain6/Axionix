@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
-import { Inter, Geist_Mono } from "next/font/google";
+import { Outfit, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { SplashScreen } from "@/components/providers/SplashScreen";
 
-const inter = Inter({
-  variable: "--font-inter",
+/** Primary UI + headings — geometric, premium feel (replaces generic Inter site-wide). */
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
@@ -29,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${geistMono.variable} antialiased noise bg-background text-foreground`}
+        className={`${outfit.variable} ${geistMono.variable} antialiased noise bg-background text-foreground`}
         suppressHydrationWarning
       >
         <ThemeProvider>

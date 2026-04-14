@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
+import { SiteContainer } from "@/components/layout/SiteContainer";
 
 const team = [
   { name: "Alex Chen", role: "Founder & CEO", image: "/team-member.png" },
@@ -119,7 +120,7 @@ export function LeadershipSlider() {
 
   return (
     <section ref={sectionRef} id="leadership" className="relative py-24 bg-background">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <SiteContainer>
         {/* Header – scroll-in animation */}
         <motion.div
           className="flex items-center gap-3 mb-12"
@@ -138,7 +139,7 @@ export function LeadershipSlider() {
 
         {/* Cards row – infinite scroll left; when end reached, reset to start (no reverse) */}
         <div className="relative">
-          <div ref={containerRef} className="overflow-hidden px-2 sm:px-4">
+          <div ref={containerRef} className="overflow-hidden">
             <motion.div
               className="flex gap-6"
               animate={{ x: -offset }}
@@ -161,10 +162,10 @@ export function LeadershipSlider() {
                     custom={i % team.length}
                   >
                     <motion.div
-                      className={`leadership-card h-[360px] sm:h-[420px] rounded-[36px] border transition-all duration-300 bg-white ${
+                      className={`leadership-card h-[360px] sm:h-[420px] rounded-[36px] border border-border bg-card transition-all duration-300 ${
                         isActive
-                          ? "border-axion/40 shadow-[0_20px_50px_-12px_rgba(15,23,42,0.18),0_0_0_1px_rgba(88,201,255,0.15)]"
-                          : "border-slate-200/80 shadow-[0_12px_40px_-12px_rgba(15,23,42,0.12)]"
+                          ? "border-axion/40 shadow-[0_20px_50px_-12px_rgba(12,18,34,0.14),0_0_0_1px_rgba(30,164,232,0.2)]"
+                          : "shadow-[0_12px_40px_-12px_rgba(12,18,34,0.1)]"
                       }`}
                       initial={false}
                       whileHover={{
@@ -200,7 +201,7 @@ export function LeadershipSlider() {
             />
           ))}
         </div>
-      </div>
+      </SiteContainer>
     </section>
   );
 }

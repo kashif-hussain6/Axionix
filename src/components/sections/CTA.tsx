@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
+import { SiteContainer } from "@/components/layout/SiteContainer";
 
 export function CTA() {
   const ref = useRef(null);
@@ -10,7 +11,7 @@ export function CTA() {
 
   return (
     <section id="cta" className="relative py-24 bg-gradient-to-b from-[#58c9ff]/10 to-background overflow-hidden">
-      <div className="relative mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+      <SiteContainer className="relative" innerClassName="text-center">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 28, rotateX: 10 }}
@@ -56,7 +57,7 @@ export function CTA() {
             </Link>
           </motion.div>
         </motion.div>
-      </div>
+      </SiteContainer>
     </section>
   );
 }

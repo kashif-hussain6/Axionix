@@ -3,6 +3,7 @@
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useId, useState } from "react";
 import { faqItems } from "@/lib/data";
+import { SiteContainer } from "@/components/layout/SiteContainer";
 
 function EyeOffIcon({ className }: { className?: string }) {
   return (
@@ -33,7 +34,7 @@ export function FAQ() {
 
   return (
     <section id="faq" className="relative bg-background py-24 perspective-3d">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <SiteContainer>
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 24 }}
@@ -111,7 +112,7 @@ export function FAQ() {
             })}
           </ul>
         </motion.div>
-      </div>
+      </SiteContainer>
     </section>
   );
 }

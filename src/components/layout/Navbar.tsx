@@ -110,12 +110,12 @@ export function Navbar() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute right-0 top-full mt-1 w-44 rounded-lg border border-slate-200 bg-white py-1 shadow-lg"
+                    className="absolute right-0 top-full mt-1 w-44 rounded-lg border border-border bg-card py-1 shadow-lg"
                   >
-                    <Link href="#cta" className="block px-4 py-2 text-sm text-[#6b7280] hover:bg-slate-50 hover:text-slate-900" onClick={() => setCompanyOpen(false)}>
+                    <Link href="#cta" className="block px-4 py-2 text-sm text-muted hover:bg-muted/15 hover:text-foreground" onClick={() => setCompanyOpen(false)}>
                       Get Started
                     </Link>
-                    <Link href="#contact" className="block px-4 py-2 text-sm text-[#6b7280] hover:bg-slate-50 hover:text-slate-900" onClick={() => setCompanyOpen(false)}>
+                    <Link href="#contact" className="block px-4 py-2 text-sm text-muted hover:bg-muted/15 hover:text-foreground" onClick={() => setCompanyOpen(false)}>
                       Contact
                     </Link>
                   </motion.div>
